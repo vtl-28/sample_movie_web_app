@@ -1,0 +1,40 @@
+services:
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:latest"
+    container_name: sqlserver-container
+    restart: always
+    ports:
+      - "1435:1433"
+    environment:
+      SA_PASSWORD: "Malaikasbf28"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - mvc-network
+    healthcheck:
+      test: ["CMD-SHELL", "dotnet sqlcmd -S localhost -U sa -P Malaikasbf28 -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  mvc-movie:
+    image: "vuyisile28/mvc-movie:wv1"
+    container_name: mvc-movie-container
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      sqlserver:
+        condition: service_started
+    networks:
+      - mvc-network
+    environment:
+      - ConnectionStrings__MvcMovieContext=Server=sqlserver;Initial Catalog=MvcMovieContext;User Id=sa;Password=Malaikasbf28;TrustServerCertificate=True;
+
+networks:
+  mvc-network:
+
+volumes:
+  sqlserver-data:

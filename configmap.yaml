@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  PROD_DB_SERVER: "sqlserver"
+  DB_NAME: "MvcMovieContext"

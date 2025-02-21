@@ -5,22 +5,24 @@ services:
     restart: always
     ports:
       - "1435:1433"
+    env_file:
+      - .env
     environment:
-      SA_PASSWORD: "Malaikasbf28"
+      SA_PASSWORD: "${PROD_DB_PASSWORD}"
       ACCEPT_EULA: "Y"
     volumes:
       - sqlserver-data:/var/opt/mssql
     networks:
       - mvc-network
     healthcheck:
-      test: ["CMD-SHELL", "dotnet sqlcmd -S localhost -U sa -P Malaikasbf28 -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "dotnet sqlcmd -S localhost -U ${PROD_DB_USER} -P ${PROD_DB_PASSWORD}-Q 'SELECT 1' || exit 1"]
       interval: 10s
       retries: 5
       start_period: 30s
       timeout: 5s
 
   mvc-movie:
-    image: "vuyisile28/mvc-movie:wv1"
+    image: "vuyisile28/mvc-movie:wv2"
     container_name: mvc-movie-container
     restart: always
     ports:
@@ -30,8 +32,8 @@ services:
         condition: service_started
     networks:
       - mvc-network
-    environment:
-      - ConnectionStrings__MvcMovieContext=Server=sqlserver;Initial Catalog=MvcMovieContext;User Id=sa;Password=Malaikasbf28;TrustServerCertificate=True;
+    env_file:
+      - .env
 
 networks:
   mvc-network:

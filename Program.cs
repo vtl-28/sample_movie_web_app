@@ -1,10 +1,24 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MvcMovie.Data;
 using MvcMovie.Models;
+
 var builder = WebApplication.CreateBuilder(args);
+
+Env.Load();
+
+// Retrieve environment variables
+string dbServer = Environment.GetEnvironmentVariable("PROD_DB_SERVER");
+string dbName = Environment.GetEnvironmentVariable("DB_NAME");
+string dbUser = Environment.GetEnvironmentVariable("PROD_DB_USER");
+string dbPassword = Environment.GetEnvironmentVariable("PROD_DB_PASSWORD");
+
+// Construct the connection string using actual environment variables
+string connectionString = $"Server={dbServer};Initial Catalog={dbName};User Id={dbUser};Password={dbPassword};TrustServerCertificate=True;";
+
 builder.Services.AddDbContext<MvcMovieContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
+    options.UseSqlServer(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -14,12 +14,31 @@ spec:
     spec:
       containers:
       - name: mvc-movie
-        image: vuyisile28/mvc-movie:wv1
+        image: vuyisile28/mvc-movie:wv2
         ports:
-        - containerPort: 80
+          - containerPort: 80
         env:
-        - name: ConnectionStrings__MvcMovieContext
-          value: "Server=sqlserver;Initial Catalog=MvcMovieContext;User Id=sa;Password=Malaikasbf28;TrustServerCertificate=True;"
+          - name: PROD_DB_SERVER
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: PROD_DB_SERVER
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: DB_NAME
+          - name: PROD_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: sqlserver-secret
+                key: PROD_DB_USER
+          - name: PROD_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: sqlserver-secret
+                key: PROD_DB_PASSWORD          
+
         livenessProbe:
           tcpSocket:
             port: 80

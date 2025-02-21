@@ -1,0 +1,68 @@
+# Ignore the .env file that contains sensitive information
+.env
+*.env
+
+# Ignore Kubernetes secrets
+secret.yaml
+
+# Ignore Docker volumes and database files
+sqlserver-pvc.yaml
+var/
+data/
+logs/
+
+# Ignore build and output directories
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.vscode
+*.vs
+
+# Ignore compiled DLLs and executables
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# Ignore database and migration artifacts
+*.db
+Migrations/
+
+# Ignore temporary files
+*.tmp
+*.log
+*.swp
+*.sln.ide
+
+# Ignore IDE configuration files (Visual Studio and Rider)
+.idea/
+.vscode/
+.vs/
+
+# Ignore NuGet packages
+packages/
+*.nupkg
+project.lock.json
+
+# Ignore Docker-related build files
+docker-compose.override.yml
+
+# Ignore Kubernetes-related secrets
+*.kube
+*.pfx
+
+# Ignore Kubernetes cache and logs
+.kube/
+
+# Ignore published files
+publish/
+dist/
+wwwroot/
+
+# Ignore MacOS and Linux system files
+.DS_Store
+Thumbs.db

@@ -12,12 +12,6 @@ spec:
       labels:
         app: mvc-movie
     spec:
-      initContainers:  # <-- This waits for SQL Server before running the app
-      - name: wait-for-sqlserver
-        image: busybox
-        command: ['sh', '-c', "until nc -z sqlserver 1433; do echo waiting for database; sleep 5; done;"]
-      
-      
       containers:
       - name: mvc-movie
         image: vuyisile28/mvc-movie:wv2

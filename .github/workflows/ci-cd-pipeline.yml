@@ -71,7 +71,7 @@ jobs:
         run: kubectl apply -f configmap.yaml --namespace=mvc-movie-namespace
 
       - name: Deploy SQL Server
-        run: kubectl apply -f sqlserver-deployment.yaml --namespace=my-namespace
+        run: kubectl apply -f sqlserver-deployment.yaml --namespace=mvc-movie-namespace
 
       - name: Wait for SQL Server to be Ready
         run: |

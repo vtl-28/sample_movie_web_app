@@ -54,7 +54,7 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube start
+          minikube start --cpus=4 --memory=8192
           kubectl config use-context minikube
 
       - name: Create Secret in Kubernetes
@@ -66,8 +66,16 @@ jobs:
       - name: Apply ConfigMap
         run: kubectl apply -f configmap.yaml
 
-      - name: Apply Kubernetes Manifests
+      - name: Deploy SQL Server
+        run: kubectl apply -f sqlserver-deployment.yaml
+
+      - name: Wait for SQL Server to be Ready
         run: |
-          kubectl apply -f sqlserver-deployment.yaml
-          kubectl apply -f mvc-movie-deployment.yaml
-          kubectl rollout status deployment/mvc-movie
+          kubectl rollout status deployment/sqlserver --timeout=300s 
+          sleep 30  # Extra wait time just to be sure
+      
+      - name: Deploy MVC Movie App
+        run: kubectl apply -f mvc-movie-deployment.yaml
+
+      - name: Wait for MVC Movie App to be Ready
+        run: kubectl rollout status deployment/mvc-movie --timeout=300s

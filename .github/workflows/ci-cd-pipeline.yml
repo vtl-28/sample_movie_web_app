@@ -71,15 +71,15 @@ jobs:
         run: kubectl apply -f configmap.yaml --namespace=mvc-movie-namespace
 
       - name: Deploy SQL Server
-        run: kubectl apply -f sqlserver-deployment.yaml --namespace=mvc-movie-namespace
+        run: kubectl apply -f sqlserver-deployment.yaml --namespace=my-namespace
 
       - name: Wait for SQL Server to be Ready
         run: |
-          kubectl rollout status deployment/sqlserver --timeout=300s 
+          kubectl rollout status deployment/sqlserver --namespace=my-namespace --timeout=300s 
           sleep 30  # Extra wait time just to be sure
       
       - name: Deploy MVC Movie App
         run: kubectl apply -f mvc-movie-deployment.yaml --namespace=mvc-movie-namespace
 
       - name: Wait for MVC Movie App to be Ready
-        run: kubectl rollout status deployment/mvc-movie --timeout=300s
+        run: kubectl rollout status deployment/mvc-movie --namespace=my-namespace --timeout=300s

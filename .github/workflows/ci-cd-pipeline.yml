@@ -54,20 +54,24 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube start --cpus=4 --memory=8192
+          minikube start --cpus=6 --memory=12288  # 6 CPUs, 12GB RAM
           kubectl config use-context minikube
+
+      - name: Apply Kubernetes Namespace
+        run: kubectl apply -f namespace.yaml
 
       - name: Create Secret in Kubernetes
         run: |
           kubectl create secret generic sqlserver-secret \
+            --namespace=mvc-movie-namespace \
             --from-literal=PROD_DB_USER=sa \
             --from-literal=PROD_DB_PASSWORD=${{ secrets.MVC_MOVIE_DB_PASSWORD }}
       
       - name: Apply ConfigMap
-        run: kubectl apply -f configmap.yaml
+        run: kubectl apply -f configmap.yaml --namespace=mvc-movie-namespace
 
       - name: Deploy SQL Server
-        run: kubectl apply -f sqlserver-deployment.yaml
+        run: kubectl apply -f sqlserver-deployment.yaml --namespace=mvc-movie-namespace
 
       - name: Wait for SQL Server to be Ready
         run: |
@@ -75,7 +79,7 @@ jobs:
           sleep 30  # Extra wait time just to be sure
       
       - name: Deploy MVC Movie App
-        run: kubectl apply -f mvc-movie-deployment.yaml
+        run: kubectl apply -f mvc-movie-deployment.yaml --namespace=mvc-movie-namespace
 
       - name: Wait for MVC Movie App to be Ready
         run: kubectl rollout status deployment/mvc-movie --timeout=300s

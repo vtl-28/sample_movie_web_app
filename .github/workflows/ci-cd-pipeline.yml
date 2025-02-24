@@ -54,7 +54,7 @@ jobs:
 
       - name: Start Minikube
         run: |
-          minikube start --cpus=6 --memory=12288  # 6 CPUs, 12GB RAM
+          minikube start --cpus=4 --memory=8192
           kubectl config use-context minikube
 
       - name: Apply Kubernetes Namespace

@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: sqlserver
 spec:
+  progressDeadlineSeconds: 600
   replicas: 1
   selector:
     matchLabels:
@@ -14,22 +15,22 @@ spec:
     spec:
       containers:
       - name: sqlserver
-        image: mcr.microsoft.com/mssql/server:latest
+        image: mcr.microsoft.com/mssql/server:2022-latest
         ports:
         - containerPort: 1433
         env:
         - name: ACCEPT_EULA
           value: "Y"
-        - name: SA_PASSWORD
+        - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: sqlserver-secret
-              key: PROD_DB_PASSWORD 
-
-
+              name: sa-secret
+              key: DB_PASSWORD 
         volumeMounts:
         - name: sqlserver-storage
           mountPath: /var/opt/mssql
+        
+
       volumes:
       - name: sqlserver-storage
         persistentVolumeClaim:

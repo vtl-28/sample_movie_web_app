@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sqlserver
-  namespace: mvc-movie-namespace
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -27,13 +26,7 @@ spec:
             secretKeyRef:
               name: sa-secret
               key: DB_PASSWORD
-        resources:  # ADD THIS SECTION
-          requests:
-            cpu: "2"  # Minimum 2 CPU cores
-            memory: "4Gi"  # Minimum 4GB RAM
-          limits:
-            cpu: "4"  # Maximum 4 CPU cores
-            memory: "8Gi"  # Maximum 8GB RAM
+    
 
         volumeMounts:
         - name: sqlserver-storage
